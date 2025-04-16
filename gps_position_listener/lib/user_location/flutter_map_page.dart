@@ -38,25 +38,26 @@ class _FlutterMapPageState extends State<FlutterMapPage> {
       },
       child: Scaffold(
         body: FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              center: position,
-              zoom: 12,
-              interactiveFlags: InteractiveFlag.pinchMove |
+          mapController: mapController,
+          options: MapOptions(
+            initialCenter: position,
+            initialZoom: 12,
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.pinchMove |
                   InteractiveFlag.pinchZoom |
                   InteractiveFlag.drag |
                   InteractiveFlag.flingAnimation |
                   InteractiveFlag.doubleTapZoom,
               enableScrollWheel: true,
             ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              ),
-              MarkerLayerOptions(
-                markers: markers,
-              )
-            ]),
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            ),
+            MarkerLayer(markers: markers),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             BlocProvider.of<UserlocationListenerBloc>(context)
