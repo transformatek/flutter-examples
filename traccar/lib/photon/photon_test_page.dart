@@ -5,9 +5,9 @@ import 'bloc/photon_bloc.dart';
 import 'models/address_data.dart';
 
 class PhotonTestPage extends StatefulWidget {
-  const PhotonTestPage({Key? key, required this.startAddress})
+  const PhotonTestPage({Key? key, required this.selectAddress})
       : super(key: key);
-  final ValueChanged startAddress;
+  final ValueChanged selectAddress;
 
   @override
   State<PhotonTestPage> createState() => _PhotonTestPageState();
@@ -95,8 +95,6 @@ class _PhotonTestPageState extends State<PhotonTestPage> {
                 child: ListView.builder(
                   itemCount: addressesList.length,
                   itemBuilder: (context, index) {
-                    final address =
-                        addressesList[index].properties!.fullAddress;
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 6),
                       shape: RoundedRectangleBorder(
@@ -105,19 +103,19 @@ class _PhotonTestPageState extends State<PhotonTestPage> {
                       elevation: 1,
                       child: ListTile(
                         title: Text(
-                          address,
+                          addressesList[index].properties!.fullAddress,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w400),
                         ),
                         onTap: () {
+                          final address = addressesList[index];
                           setState(() {
                             FocusScope.of(context).unfocus();
-                            selectedText = address;
-                            widget.startAddress(address);
+                            selectedText = address.properties!.fullAddress;
+                            widget.selectAddress(address);
                             addressController.text = '';
                             addressesList = [];
                           });
-                          Navigator.pop(context);
                           Navigator.pop(context);
                         },
                       ),

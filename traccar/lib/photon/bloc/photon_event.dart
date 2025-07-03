@@ -9,3 +9,8 @@ class GetSelectionLocation extends PhotonEvent {
   final String address;
   final String localeLanguage;
 }
+
+class GetSelectionAddress extends PhotonEvent {
+  GetSelectionAddress({required this.coordinates});
+  final LatLng coordinates;
+}

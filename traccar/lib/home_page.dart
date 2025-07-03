@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gps_position_listener/photon/bloc/photon_bloc.dart';
+import 'package:gps_position_listener/photon/models/address_data.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'select_address_map.dart';
 
@@ -10,27 +14,67 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String startAddress = "";
-  String deliveryAddress = "";
+  AddressData? startAddress;
+  AddressData? deliveryAddress;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Select Route Addresses")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50.0, top: 20.0),
-              child: Card(
+    return BlocBuilder<PhotonBloc, PhotonState>(builder: (context, state) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Select Route Addresses")),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 50.0, top: 20.0),
+                child: Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.location_on,
+                        color: Colors.blue, size: 30),
+                    title: const Text("Start Address"),
+                    subtitle: Text(
+                      startAddress != null
+                          ? startAddress!.properties!.fullAddress
+                          : "",
+                      style: const TextStyle(color: Colors.blue),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectAddressMapPage(
+                              initialPosition: startAddress != null
+                                  ? LatLng(
+                                      startAddress!.geometry!.coordinates![1],
+                                      startAddress!.geometry!.coordinates![0],
+                                    )
+                                  : null,
+                              selectAddress: (address) {
+                                setState(() {
+                                  startAddress = address;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Card(
                 child: ListTile(
-                  leading: const Icon(Icons.location_on,
-                      color: Colors.blue, size: 30),
-                  title: const Text("Start Address"),
+                  leading:
+                      const Icon(Icons.flag, color: Colors.green, size: 30),
+                  title: const Text("Delivery Address"),
                   subtitle: Text(
-                    startAddress,
-                    style: const TextStyle(color: Colors.blue),
+                    deliveryAddress != null
+                        ? deliveryAddress!.properties!.fullAddress
+                        : "",
+                    style: const TextStyle(color: Colors.green),
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.edit),
@@ -39,9 +83,9 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SelectAddressMapPage(
-                            startAddress: (address) {
+                            selectAddress: (address) {
                               setState(() {
-                                startAddress = address.toString();
+                                deliveryAddress = address;
                               });
                             },
                           ),
@@ -51,52 +95,25 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.flag, color: Colors.green, size: 30),
-                title: const Text("Delivery Address"),
-                subtitle: Text(
-                  deliveryAddress,
-                  style: const TextStyle(color: Colors.green),
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SelectAddressMapPage(
-                          startAddress: (address) {
-                            setState(() {
-                              deliveryAddress = address.toString();
-                            });
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(top: 100.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(top: 100.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                  onPressed: () {},
+                  child: const Text("View Route"),
                 ),
-                onPressed: () {},
-                child: const Text("View Route"),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
