@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gps_position_listener/ors/show_route_page.dart';
 import 'package:gps_position_listener/photon/bloc/photon_bloc.dart';
 import 'package:gps_position_listener/photon/models/address_data.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'select_address_map.dart';
+import 'photon/select_address_map.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -106,7 +107,31 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShowRoutePage(
+                                  startAddress: startAddress != null &&
+                                          startAddress!.geometry != null
+                                      ? LatLng(
+                                          startAddress!
+                                              .geometry!.coordinates![1],
+                                          startAddress!
+                                              .geometry!.coordinates![0],
+                                        )
+                                      : const LatLng(35.29749, -1.14037),
+                                  endAddress: deliveryAddress != null &&
+                                          deliveryAddress!.geometry != null
+                                      ? LatLng(
+                                          deliveryAddress!
+                                              .geometry!.coordinates![1],
+                                          deliveryAddress!
+                                              .geometry!.coordinates![0],
+                                        )
+                                      : const LatLng(35.69111, -0.64167),
+                                )));
+                  },
                   child: const Text("View Route"),
                 ),
               ),
