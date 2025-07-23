@@ -5,7 +5,7 @@ import 'package:gps_position_listener/photon/bloc/photon_bloc.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
-import 'photon/photon_test_page.dart';
+import 'photon_test_page.dart';
 
 class SelectAddressMapPage extends StatefulWidget {
   const SelectAddressMapPage({
@@ -106,7 +106,8 @@ class _SelectAddressMapPageState extends State<SelectAddressMapPage> {
           ),
           children: [
             TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              urlTemplate:
+                  'http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}',
             ),
             MarkerLayer(
               markers: [
