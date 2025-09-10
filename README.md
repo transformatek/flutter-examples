@@ -6,18 +6,79 @@ A lightweight Flutter app to search addresses and get locations using the **Phot
 
 ## 🚀 Getting Started
 
-### 1. Clone the project
+### 1. Install / Setup Java version
+
+Ensure you have the right java version (17)
+In `~/.bashrc` you should have 
+(we suppose that android Sdk and flutter are installed in /opt)
+
+```bash
+sudo apt install openjdk-17-jdk
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+export PATH="$PATH:/op/flutter/bin:$JAVA_HOME/bin"
+export ANDROID_HOME=/opt/Android/Sdk
+export ANDROID_SDK_ROOT=/opt/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+Check that the java version is fine
+```bash
+java --version
+sudo update-alternatives --config java
+flutter config --jdk-dir=$JAVA_HOME
+```
+
+
+### 2. Clone the project
 
 ```bash
 git clone https://github.com/transformatek/flutter-examples.git
-cd geo_services
+cd flutter_examples
 ```
 
 ### 2. Install dependencies
 
 ```bash
 flutter pub get
+code .
 ```
+
+Useful commands for project cache invalidation
+```bash
+flutter clean
+cd ./android
+./gradlew clean
+rm -rf .gradle
+./gradlew wrapper --gradle-version=7.3
+```
+
+Useful commands to run the project
+
+```bash
+adb start-server
+emulator -list-avds
+emulator -avd <AVD NAME>
+flutter run -v
+```
+
+TO Build a release
+
+- Follow this guide for project setup [https://docs.flutter.dev/deployment/android](https://docs.flutter.dev/deployment/android)
+- [Flutter launcher icons documentation](https://pub.dev/packages/flutter_launcher_icons)
+
+```bash
+flutter pub get
+flutter pub run flutter_launcher_icons:main
+flutter clean && flutter build appbundle --release
+```
+
 
 ## 🔑 API Key Setup
 
